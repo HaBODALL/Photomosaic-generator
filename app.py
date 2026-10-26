@@ -16,14 +16,13 @@ from photomosaic.downloaders.openverse import OpenverseDownloader
 
 st.set_page_config(
     page_title="Photomosaic Generator Studio",
-    page_icon="🖼️",
     layout="wide"
 )
 
-st.title("🖼️ Photomosaic Generator Studio")
+st.title("Photomosaic Generator Studio")
 st.markdown("Transform images and videos into photomosaics with custom image pools and themes.")
 
-st.sidebar.header("⚙️ Configuration")
+st.sidebar.header("Configuration")
 
 # Tile options
 stride = st.sidebar.slider("Tile Size (Stride in px)", min_value=10, max_value=100, value=30, step=5)
@@ -33,7 +32,7 @@ anti_repetition = st.sidebar.slider("Anti-Repetition Threshold", min_value=0, ma
 overlay_ratio = st.sidebar.slider("Overlay Ratio (Blend Original)", min_value=0.0, max_value=0.8, value=0.0, step=0.05)
 
 # Tabs
-tab_gen, tab_download, tab_connectors = st.tabs(["🎨 Mosaic Generator", "📥 Theme Downloader", "🔌 Cloud Services"])
+tab_gen, tab_download, tab_connectors = st.tabs(["Mosaic Generator", "Theme Downloader", "Cloud Services"])
 
 with tab_gen:
     st.subheader("1. Source Image")
@@ -55,7 +54,7 @@ with tab_gen:
         with col1:
             st.image(cv2.cvtColor(input_image, cv2.COLOR_BGR2RGB), caption="Target Image", use_container_width=True)
 
-        if st.button("🚀 Generate Photomosaic", type="primary"):
+        if st.button("Generate Photomosaic", type="primary"):
             if not os.path.isdir(pool_dir):
                 st.error(f"Tile pool directory not found: {pool_dir}")
             else:
@@ -94,7 +93,7 @@ with tab_gen:
                     # Encode for download
                     _, encoded_img = cv2.imencode(".jpg", result_bgr)
                     st.download_button(
-                        label="💾 Download Result Image",
+                        label="Download Result Image",
                         data=encoded_img.tobytes(),
                         file_name="photomosaic_output.jpg",
                         mime="image/jpeg"
@@ -107,7 +106,7 @@ with tab_download:
     download_limit = st.slider("Number of images", min_value=10, max_value=100, value=30, step=10)
     target_folder = st.text_input("Save to Folder", value="image_pool")
 
-    if st.button("📥 Download Theme Images"):
+    if st.button("Download Theme Images"):
         dl_progress = st.progress(0.0)
         dl_status = st.empty()
 

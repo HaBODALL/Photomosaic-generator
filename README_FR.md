@@ -1,88 +1,88 @@
-# 🖼️ Photomosaic Generator Studio
+# Photomosaic Generator Studio
 
-> **[English version available here](README.md)** | **[🌐 Explorer la Démo GitHub Pages](https://habodall.github.io/Photomosaic-generator/)**
+> **[English version available here](README.md)** | **[Explorer la Demo GitHub Pages](https://habodall.github.io/Photomosaic-generator/)**
 
-Générateur de photomosaïques haute performance et convivial en Python pour images et vidéos, propulsé par la correspondance de couleurs CIELAB, l'indexation spatiale cKDTree, des algorithmes d'anti-répétition, un téléchargeur d'images par thème et des connecteurs cloud personnels.
+Generateur de photomosaiques haute performance et convivial en Python pour images et videos, propulse par la correspondance de couleurs CIELAB, l'indexation spatiale cKDTree, des algorithmes d'anti-repetition, un telechargeur d'images par theme et des connecteurs cloud personnels.
 
 ---
 
-## 📸 Exemple de Résultat
+## Exemple de Resultat
 
 <p align="center">
   <img src="demo/input.jpg" width="45%" alt="Image Cible">
-  <img src="demo/example_mosaic.jpg" width="45%" alt="Résultat Photomosaïque">
+  <img src="demo/example_mosaic.jpg" width="45%" alt="Resultat Photomosaique">
   <br>
-  <i>À gauche : Image cible d'origine | À droite : Photomosaïque générée (CIELAB 2x2 sous-quadrants, tuiles de 20px)</i>
+  <i>A gauche : Image cible d'origine | A droite : Photomosaique generee (CIELAB 2x2 sous-quadrants, tuiles de 20px)</i>
 </p>
 
 ---
 
-## ⚠️ AVERTISSEMENT VIBE CODING & SÉCURITÉ
+## AVERTISSEMENT VIBE CODING ET SECURITE
 
-> **À LIRE ATTENTIVEMENT AVANT UTILISATION**
+> **A LIRE ATTENTIVEMENT AVANT UTILISATION**
 >
-> Ce dépôt a été restructuré et enrichi dans le cadre d'une **expérience de "vibe coding"** (développement rapide assisté par IA). Bien que le code soit structuré et testé, les utilisateurs **DOIVENT** faire preuve d'une grande prudence concernant la sécurité, les requêtes réseau et la gestion des identifiants d'API.
+> Ce depot a ete meure et enrichi dans le cadre d'une **experience de "vibe coding"** (developpement rapide assiste par IA). Bien que le code soit meure et teste, les utilisateurs **DOIVENT** faire preuve d'une grande prudence concernant la securite, les requetes reseau et la gestion des identifiants d'API.
 
-### Bonnes Pratiques de Sécurité :
-1. **Clés API & Secrets :** Ne jamais inscrire en dur de clés d'API, jetons d'accès OAuth ou mots de passe WebDAV directement dans les scripts ni les publier sur un dépôt Git public.
-2. **Variables d'Environnement :** Utilisez toujours un fichier `.env` (ignoré par le fichier `.gitignore`) ou des variables d'environnement système pour stocker vos secrets.
-3. **Sécurité HTTP & SSL :** Assurez-vous que tous vos points d'accès distants (Immich, Nextcloud/WebDAV, API externes) utilisent le protocole sécurisé HTTPS en production.
-4. **Services Tiers :** Vérifiez les limites de requêtes (*rate limits*) et les conditions d'utilisation lors du téléchargement massif d'images.
+### Bonnes Pratiques de Securite :
+1. **Cles API et Secrets :** Ne jamais inscrire en dur de cles d'API, jetons d'acces OAuth ou mots de passe WebDAV directement dans les scripts ni les publier sur un depot Git public.
+2. **Variables d'Environnement :** Utilisez toujours un fichier `.env` (ignore par le fichier `.gitignore`) ou des variables d'environnement système pour stocker vos secrets.
+3. **Securite HTTP et SSL :** Assurez-vous que tous vos points d'acces distants (Immich, Nextcloud/WebDAV, API externes) utilisent le protocole securise HTTPS en production.
+4. **Services Tiers :** Verifiez les limites de requetes (*rate limits*) et les conditions d'utilisation lors du telechargement massif d'images.
 
 ---
 
-## ✨ Fonctionnalités
+## Fonctionnalites
 
-- **🎨 Correspondance de Couleurs Avancée :**
-  - **Espace de Couleur CIELAB (L\*a\*b\*) :** Calcul de distance chromatique basé sur la perception visuelle humaine.
-  - **Analyse par Sous-Quadrants :** Découpage 2x2 (ou personnalisé) capturant les dégradés et textures internes de chaque tuile.
+- **Correspondance de Couleurs Avancee :**
+  - **Espace de Couleur CIELAB (L\*a\*b\*) :** Calcul de distance chromatique base sur la perception visuelle humaine.
+  - **Analyse par Sous-Quadrants :** Decoupage 2x2 (ou personnalise) capturant les degrades et textures internes de chaque tuile.
   - **Recherche Rapide cKDTree :** Recherche ultra-rapide des meilleures tuiles via `scipy.spatial.cKDTree`.
-  - **Pénalité d'Anti-Répétition :** Empêche la réutilisation répétitive de la même tuile à proximité.
-  - **Superposition Réglable (Overlay) :** Mélange doux entre l'image cible originale et les tuiles de la mosaïque.
+  - **Penalite d'Anti-Repetition :** Empeche la reutilisation repetitve de la meme tuile a proximite.
+  - **Superposition Reglables (Overlay) :** Melange doux entre l'image cible originale et les tuiles de la mosaique.
 
-- **📥 Téléchargeur d'Images par Thème (`photomosaic.downloaders`) :**
-  - **Wikimedia Commons** (Domaine public & licences libres)
+- **Telechargeur d'Images par Theme (`photomosaic.downloaders`) :**
+  - **Wikimedia Commons** (Domaine public et licences libres)
   - **Archive.org** (Archives d'images du domaine public)
-  - **Openverse** (Recherche de médias Creative Commons)
+  - **Openverse** (Recherche de medias Creative Commons)
   - **API Unsplash, Pexels, Pixabay**
 
-- **🔌 Connecteurs de Médias Cloud (`photomosaic.connectors`) :**
-  - **Immich** (Gestionnaire de photos auto-hébergé)
+- **Connecteurs de Medias Cloud (`photomosaic.connectors`) :**
+  - **Immich** (Gestionnaire de photos auto-heberge)
   - **API REST Google Photos**
   - **WebDAV / Nextcloud**
 
-- **🚀 Interface Web Studio & CLI Conviviale :**
-  - **Interface Web Interactive Streamlit (`app.py`) :** Glisser-déposer, curseurs en direct, prévisualisation et téléchargement par thème.
+- **Interface Web Studio et CLI Conviviale :**
+  - **Interface Web Interactive Streamlit (`app.py`) :** Glisser-deposer, curseurs en direct, previsualisation et telechargement par theme.
   - **Interface en Ligne de Commande (`photomosaic` CLI) :** CLI scriptable pour l'automatisation.
-  - **Compatibilité des Anciens Scripts :** Prise en charge complète de `image2image.py` et `video2video.py`.
+  - **Compatibilite des Anciens Scripts :** Prise en charge complete de `image2image.py` et `video2video.py`.
 
 ---
 
-## 🌐 Exploration sur GitHub Pages
+## Exploration sur GitHub Pages
 
-Vous pouvez explorer la présentation interactive du projet directement sur GitHub Pages :
-👉 **[https://habodall.github.io/Photomosaic-generator/](https://habodall.github.io/Photomosaic-generator/)**
+Vous pouvez explorer la presentation interactive du projet directement sur GitHub Pages :
+**[https://habodall.github.io/Photomosaic-generator/](https://habodall.github.io/Photomosaic-generator/)**
 
-*Pour activer GitHub Pages sur votre dépôt :*
-1. Allez dans les **Settings** (Paramètres) du dépôt > **Pages**.
-2. Dans **Build and deployment**, choisissez **Branch** : `main` (ou branche par défaut) et le dossier `/docs`.
-3. Enregistrez pour publier le site de présentation !
+*Pour activer GitHub Pages sur votre depot :*
+1. Allez dans les **Settings** (Parametres) du depot > **Pages**.
+2. Dans **Build and deployment**, choisissez **Branch** : `main` (ou branche par defaut) et le dossier `/docs`.
+3. Enregistrez pour publier le site de presentation !
 
 ---
 
-## ⚙️ Installation
+## Installation
 
-### Prérequis
+### Prerequis
 - **Python 3.9+ / 3.12+**
 - Git
 
-### Étapes
+### Etapes
 ```bash
-# 1. Cloner le dépôt
+# 1. Cloner le depot
 git clone https://github.com/HaBODALL/Photomosaic-generator.git
 cd Photomosaic-generator
 
-# 2. Installer le package en mode éditable
+# 2. Installer le package en mode editable
 pip install -e .
 
 # Optionnel : Copier la configuration d'environnement
@@ -91,7 +91,7 @@ cp .env.example .env
 
 ---
 
-## 💻 Utilisation
+## Utilisation
 
 ### 1. Interface Web Interactive (Streamlit)
 Lancez l'interface Web conviviale dans votre navigateur :
@@ -101,36 +101,36 @@ streamlit run app.py
 
 ### 2. Interface en Ligne de Commande (CLI)
 ```bash
-# Générer une image mosaïque
+# Generer une image mosaique
 photomosaic image -i data/input.jpg -o data/output.jpg -p image_pool -s 30 --color_space lab --anti_repetition 2
 
-# Générer une vidéo mosaïque
+# Generer une video mosaique
 photomosaic video -i data/input.mp4 -o data/output.mp4 -p image_pool -s 20
 
-# Télécharger des images par thème depuis Wikimedia Commons
+# Telecharger des images par theme depuis Wikimedia Commons
 photomosaic download -t "nature" -o image_pool --source wikimedia --limit 50
 ```
 
 ### 3. Utilisation des Anciens Scripts
 ```bash
-# Image à Image
+# Image a Image
 python image2image.py --input data/input.jpg --output data/output.jpg --pool image_pool --stride 30
 
-# Vidéo à Vidéo
+# Video a Video
 python video2video.py --input data/input.mp4 --output data/output.mp4 --pool image_pool --stride 20
 ```
 
 ---
 
-## 🧪 Tests Automatisés
+## Tests Automatises
 
-Pour exécuter la suite de tests unitaires :
+Pour executer la suite de tests unitaires :
 ```bash
 pytest
 ```
 
 ---
 
-## 📜 Licence
+## Licence
 
-Distribué sous la licence MIT. Voir le fichier `LICENSE` pour plus de détails.
+Distribue sous la licence MIT. Voir le fichier `LICENSE` pour plus de details.

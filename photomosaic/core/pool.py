@@ -39,6 +39,11 @@ class TilePool:
         # Tracking usage positions for anti-repetition: tile_idx -> List[(grid_x, grid_y)]
         self.usage_history: dict = {}
 
+    def reset_usage_history(self):
+        """Reset usage history for anti-repetition tracking."""
+        for idx in range(len(self.tiles)):
+            self.usage_history[idx] = []
+
     def add_image(self, image_bgr: np.ndarray, path: str = ""):
         """Resize and add a single tile image."""
         resized = cv2.resize(image_bgr, self.tile_size, interpolation=cv2.INTER_AREA)
