@@ -1,8 +1,19 @@
 # 🖼️ Photomosaic Generator Studio
 
-> **[English version available here](README.md)**
+> **[English version available here](README.md)** | **[🌐 Explorer la Démo GitHub Pages](https://habodall.github.io/Photomosaic-generator/)**
 
 Générateur de photomosaïques haute performance et convivial en Python pour images et vidéos, propulsé par la correspondance de couleurs CIELAB, l'indexation spatiale cKDTree, des algorithmes d'anti-répétition, un téléchargeur d'images par thème et des connecteurs cloud personnels.
+
+---
+
+## 📸 Exemple de Résultat
+
+<p align="center">
+  <img src="demo/input.jpg" width="45%" alt="Image Cible">
+  <img src="demo/example_mosaic.jpg" width="45%" alt="Résultat Photomosaïque">
+  <br>
+  <i>À gauche : Image cible d'origine | À droite : Photomosaïque générée (CIELAB 2x2 sous-quadrants, tuiles de 20px)</i>
+</p>
 
 ---
 
@@ -44,6 +55,18 @@ Générateur de photomosaïques haute performance et convivial en Python pour im
   - **Interface Web Interactive Streamlit (`app.py`) :** Glisser-déposer, curseurs en direct, prévisualisation et téléchargement par thème.
   - **Interface en Ligne de Commande (`photomosaic` CLI) :** CLI scriptable pour l'automatisation.
   - **Compatibilité des Anciens Scripts :** Prise en charge complète de `image2image.py` et `video2video.py`.
+
+---
+
+## 🌐 Exploration sur GitHub Pages
+
+Vous pouvez explorer la présentation interactive du projet directement sur GitHub Pages :
+👉 **[https://habodall.github.io/Photomosaic-generator/](https://habodall.github.io/Photomosaic-generator/)**
+
+*Pour activer GitHub Pages sur votre dépôt :*
+1. Allez dans les **Settings** (Paramètres) du dépôt > **Pages**.
+2. Dans **Build and deployment**, choisissez **Branch** : `main` (ou branche par défaut) et le dossier `/docs`.
+3. Enregistrez pour publier le site de présentation !
 
 ---
 
