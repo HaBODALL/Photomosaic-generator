@@ -1,49 +1,49 @@
 """
-@author: Thang Nguyen <nhthang1009@gmail.com>
+Legacy image2image.py compatibility entry point.
 """
 import argparse
 import cv2
-import numpy as np
-import glob
-from itertools import product
+from photomosaic.core.pool import TilePool
+from photomosaic.core.engine import generate_mosaic_image
 
 
 def get_args():
-    parser = argparse.ArgumentParser("Viet Nguyen Photomosaic")
+    parser = argparse.ArgumentParser("Photomosaic Image Generator")
     parser.add_argument("--input", type=str, default="data/input.jpg", help="Path to input image")
     parser.add_argument("--output", type=str, default="data/output.jpg", help="Path to output image")
     parser.add_argument("--pool", type=str, default="image_pool", help="Path to directory containing component images")
     parser.add_argument("--stride", type=int, default=30, help="size of each component image")
+    parser.add_argument("--color_space", type=str, default="lab", choices=["lab", "bgr"], help="Color space for matching")
+    parser.add_argument("--sub_grid", type=int, default=2, help="Sub-grid divisions for feature vector")
+    parser.add_argument("--anti_repetition", type=int, default=0, help="Anti-repetition distance threshold")
+    parser.add_argument("--overlay_ratio", type=float, default=0.0, help="Overlay blending ratio")
     args = parser.parse_args()
     return args
 
 
-def get_component_images(path, size):
-    images = []
-    avg_colors = []
-    for image_path in glob.glob("{}/*.png".format(path)) + glob.glob("{}/*.jpg".format(path)):
-        image = cv2.imread(image_path, cv2.IMREAD_COLOR)
-        image = cv2.resize(image, (size, size))
-        images.append(image)
-        avg_colors.append(np.sum(np.sum(image, axis=0), axis=0) / (size ** 2))
-    return images, np.array(avg_colors)
-
-
-def main(opt):
-    input_image = cv2.imread(opt.input, cv2.IMREAD_COLOR)
-    height, width, num_channels = input_image.shape
-    blank_image = np.zeros((height, width, 3), np.uint8)
-    images, avg_colors = get_component_images(opt.pool, opt.stride)
-    for i, j in product(range(int(width / opt.stride)), range(int(height / opt.stride))):
-        partial_input_image = input_image[j * opt.stride: (j + 1) * opt.stride,
-                              i * opt.stride: (i + 1) * opt.stride, :]
-        partial_avg_color = np.sum(np.sum(partial_input_image, axis=0), axis=0) / (opt.stride ** 2)
-        distance_matrix = np.linalg.norm(partial_avg_color - avg_colors, axis=1)
-        idx = np.argmin(distance_matrix)
-        blank_image[j * opt.stride: (j + 1) * opt.stride, i * opt.stride: (i + 1) * opt.stride, :] = images[idx]
-    cv2.imwrite(opt.output, blank_image)
-
-
-if __name__ == '__main__':
+def main():
     opt = get_args()
-    main(opt)
+    input_image = cv2.imread(opt.input, cv2.IMREAD_COLOR)
+    if input_image is None:
+        raise FileNotFoundError(f"Input image not found: {opt.input}")
+
+    pool = TilePool(
+        tile_size=(opt.stride, opt.stride),
+        color_space=opt.color_space,
+        sub_grid=opt.sub_grid,
+        anti_repetition_threshold=opt.anti_repetition
+    )
+    pool.load_from_directory(opt.pool)
+
+    output_image = generate_mosaic_image(
+        input_image,
+        pool,
+        stride=opt.stride,
+        overlay_ratio=opt.overlay_ratio
+    )
+    cv2.imwrite(opt.output, output_image)
+    print(f"Photomosaic created successfully: {opt.output}")
+
+
+if __name__ == "__main__":
+    main()
