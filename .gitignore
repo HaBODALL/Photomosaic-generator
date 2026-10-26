@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+build/
+dist/
+*.egg-info/
+.env
+data/output_test.jpg
+data/cli_out.jpg
+data/cli_test_out.jpg
+data/test_downloads/

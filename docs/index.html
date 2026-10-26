@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photomosaic Generator Studio | Interactive Showcase</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .hero {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            padding: 4rem 0;
+            border-bottom: 1px solid #334155;
+        }
+        .badge-tech {
+            background-color: #38bdf8;
+            color: #0f172a;
+            font-weight: 600;
+        }
+        .comparison-container {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+            border: 1px solid #334155;
+        }
+        .card-custom {
+            background-color: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 1.5rem;
+            height: 100%;
+        }
+        .warning-box {
+            background-color: rgba(239, 68, 68, 0.1);
+            border-left: 4px solid #ef4444;
+            padding: 1rem 1.5rem;
+            border-radius: 6px;
+            margin-bottom: 2rem;
+        }
+        footer {
+            border-top: 1px solid #334155;
+            padding: 2rem 0;
+            color: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Hero Header -->
+    <header class="hero text-center">
+        <div class="container">
+            <h1 class="display-4 fw-bold text-white mb-3">🖼️ Photomosaic Generator Studio</h1>
+            <p class="lead text-slate-300 mb-4">High-performance Python photomosaic art engine powered by CIELAB color matching, cKDTree indexing, theme downloaders, and personal cloud connectors.</p>
+            <div class="d-flex justify-content-center gap-2 mb-3">
+                <span class="badge badge-tech rounded-pill px-3 py-2">CIELAB L*a*b*</span>
+                <span class="badge badge-tech rounded-pill px-3 py-2">cKDTree Search</span>
+                <span class="badge badge-tech rounded-pill px-3 py-2">Streamlit Web GUI</span>
+                <span class="badge badge-tech rounded-pill px-3 py-2">Cloud Connectors</span>
+            </div>
+            <div class="mt-4">
+                <a href="https://github.com/HaBODALL/Photomosaic-generator" class="btn btn-primary btn-lg px-4 me-2">GitHub Repository</a>
+                <a href="#demo" class="btn btn-outline-light btn-lg px-4">Explore Demo</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container my-5">
+
+        <!-- Security Warning Section -->
+        <div class="warning-box">
+            <h5 class="text-danger fw-bold mb-2">⚠️ Vibe Coding & Security Warning</h5>
+            <p class="mb-0">This repository is an experimental <strong>"vibe coding" project</strong> (AI-assisted rapid iteration). Users should never expose API keys or OAuth credentials in public code. Always use <code>.env</code> files and secure HTTPS endpoints.</p>
+        </div>
+
+        <!-- Interactive Comparison Section -->
+        <section id="demo" class="my-5 text-center">
+            <h2 class="fw-bold mb-4">📸 Photomosaic Output Showcase</h2>
+            <p class="text-muted mb-4">Comparison between original input image and the generated photomosaic created from component images in <code>image_pool</code>.</p>
+
+            <div class="row g-4 justify-content-center">
+                <div class="col-md-6">
+                    <div class="card-custom">
+                        <h5 class="fw-bold text-info mb-3">Original Input Target</h5>
+                        <img src="../demo/input.jpg" class="img-fluid rounded border border-secondary" alt="Input Target Image">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card-custom">
+                        <h5 class="fw-bold text-success mb-3">Generated Photomosaic</h5>
+                        <img src="../demo/example_mosaic.jpg" class="img-fluid rounded border border-secondary" alt="Photomosaic Result">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Feature Grid -->
+        <section class="my-5">
+            <h2 class="fw-bold text-center mb-5">✨ Key Architectural Innovations</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card-custom">
+                        <h4 class="h5 fw-bold text-primary">🎨 CIELAB & 2x2 Sub-Grid</h4>
+                        <p class="text-slate-400">Uses perceptual L*a*b* color space matching and sub-quadrant feature vectors to preserve gradients and local tile textures.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card-custom">
+                        <h4 class="h5 fw-bold text-primary">📥 Theme Downloaders</h4>
+                        <p class="text-slate-400">Download stock and open-license photo collections on demand from Wikimedia Commons, Archive.org, Openverse, Unsplash, Pexels, and Pixabay.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card-custom">
+                        <h4 class="h5 fw-bold text-primary">🔌 Cloud Media Connectors</h4>
+                        <p class="text-slate-400">Modular connectors for self-hosted Immich instances, Google Photos API, and WebDAV / Nextcloud personal libraries.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Start Section -->
+        <section class="my-5">
+            <div class="card-custom">
+                <h3 class="fw-bold mb-3">🚀 Quick Start Guide</h3>
+                <pre class="bg-dark text-success p-3 rounded"><code># 1. Clone repository
+git clone https://github.com/HaBODALL/Photomosaic-generator.git
+cd Photomosaic-generator
+
+# 2. Install package
+pip install -e .
+
+# 3. Launch Web GUI
+streamlit run app.py
+
+# 4. Or use CLI
+photomosaic image -i data/input.jpg -o data/output.jpg -p image_pool -s 30 --color_space lab</code></pre>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="text-center">
+        <div class="container">
+            <p class="mb-0">Photomosaic Generator Studio &copy; 2026. Distributed under MIT License.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
