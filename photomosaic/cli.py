@@ -10,6 +10,7 @@ from photomosaic.core.engine import generate_mosaic_image, generate_mosaic_video
 from photomosaic.downloaders.wikimedia import WikimediaDownloader
 from photomosaic.downloaders.archive_org import ArchiveOrgDownloader
 from photomosaic.downloaders.openverse import OpenverseDownloader
+from photomosaic.downloaders.picsum import PicsumDownloader
 
 
 def main():
@@ -41,10 +42,10 @@ def main():
 
     # Download command
     dl_parser = subparsers.add_parser("download", help="Download images by keyword/theme")
-    dl_parser.add_argument("--theme", "-t", type=str, required=True, help="Search theme or keyword")
+    dl_parser.add_argument("--theme", "-t", type=str, default="random", help="Search theme or keyword")
     dl_parser.add_argument("--output", "-o", type=str, default="image_pool", help="Output directory")
-    dl_parser.add_argument("--source", type=str, default="wikimedia", choices=["wikimedia", "archive", "openverse"], help="Provider")
-    dl_parser.add_argument("--limit", type=int, default=30, help="Number of images to download")
+    dl_parser.add_argument("--source", type=str, default="picsum", choices=["picsum", "wikimedia", "archive", "openverse"], help="Provider")
+    dl_parser.add_argument("--limit", type=int, default=50, help="Number of images to download")
 
     args = parser.parse_args()
 
@@ -85,7 +86,9 @@ def main():
         print(f"Photomosaic video created: {args.output}")
 
     elif args.command == "download":
-        if args.source == "wikimedia":
+        if args.source == "picsum":
+            downloader = PicsumDownloader()
+        elif args.source == "wikimedia":
             downloader = WikimediaDownloader()
         elif args.source == "archive":
             downloader = ArchiveOrgDownloader()

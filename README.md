@@ -10,10 +10,41 @@ High-performance, user-friendly Python photomosaic art generator for images and 
 
 <p align="center">
   <img src="demo/input.jpg" width="45%" alt="Input Image">
-  <img src="demo/example_mosaic.jpg" width="45%" alt="Photomosaic Output">
+  <img src="demo/output.jpg" width="45%" alt="Photomosaic Output">
   <br>
-  <i>Left: Input Target Image | Right: Generated Photomosaic (CIELAB 2x2 Sub-Grid, Stride 20px)</i>
+  <i>Left: Input Target Image | Right: Generated Photomosaic (CIELAB 2x2 Sub-Grid, Stride 15px, Anti-Repetition 3)</i>
 </p>
+
+---
+
+## Quickstart: Preparing Your Image Pool
+
+To build a photomosaic, you need a collection of component images (tile pool). You can start immediately using either method:
+
+### Option 1: Direct Download (ZIP / Datasets)
+- Download standard image datasets like **Animal Image Dataset** or **Intel Image Classification** on Kaggle.
+- Place the uncompressed images into `image_pool/`. Images are automatically indexed and normalized.
+
+### Option 2: Automated Script / API Fetching
+Download 50-500 random or themed photos instantly without API keys using the built-in downloader CLI or Python script:
+
+```bash
+# Download 50 images instantly via CLI using Lorem Picsum
+photomosaic download --source picsum --limit 50 --output image_pool
+```
+
+Or using custom Python:
+```python
+import requests, os, time
+
+os.makedirs("image_pool", exist_ok=True)
+for i in range(1, 51):
+    r = requests.get(f"https://picsum.photos/200/200?random={i}")
+    if r.status_code == 200:
+        with open(f"image_pool/img_{i}.jpg", "wb") as f:
+            f.write(r.content)
+    time.sleep(0.05)
+```
 
 ---
 
@@ -41,6 +72,7 @@ High-performance, user-friendly Python photomosaic art generator for images and 
   - **Overlay Blending:** Smooth blending ratio option between original image and mosaic tiles.
 
 - **Keyword/Theme Image Downloaders (`photomosaic.downloaders`):**
+  - **Lorem Picsum** (Instant 1-click no-key pool generator)
   - **Wikimedia Commons** (Public Domain and Open License)
   - **Archive.org** (Public Domain Image Archives)
   - **Openverse** (Creative Commons Media Search)
@@ -63,10 +95,8 @@ High-performance, user-friendly Python photomosaic art generator for images and 
 You can explore the project showcase online via GitHub Pages:
 **[https://habodall.github.io/Photomosaic-generator/](https://habodall.github.io/Photomosaic-generator/)**
 
-*To activate GitHub Pages for your fork/repo:*
-1. Go to repository **Settings** > **Pages**.
-2. Under **Build and deployment**, select **Branch**: `main` (or default branch) and folder `/docs`.
-3. Save to publish the interactive showcase site!
+*To configure GitHub Pages:*
+Go to **[https://github.com/HaBODALL/Photomosaic-generator/settings/pages/source](https://github.com/HaBODALL/Photomosaic-generator/settings/pages/source)** and set **Branch**: `main` (or default branch) and folder `/docs`.
 
 ---
 
@@ -107,8 +137,8 @@ photomosaic image -i data/input.jpg -o data/output.jpg -p image_pool -s 30 --col
 # Generate mosaic video
 photomosaic video -i data/input.mp4 -o data/output.mp4 -p image_pool -s 20
 
-# Download theme images from Wikimedia Commons
-photomosaic download -t "nature" -o image_pool --source wikimedia --limit 50
+# Download theme images from Wikimedia Commons or Picsum
+photomosaic download -t "nature" -o image_pool --source picsum --limit 50
 ```
 
 ### 3. Legacy Script Entry Points
