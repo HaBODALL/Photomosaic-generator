@@ -13,6 +13,7 @@ from photomosaic.core.engine import generate_mosaic_image
 from photomosaic.downloaders.wikimedia import WikimediaDownloader
 from photomosaic.downloaders.archive_org import ArchiveOrgDownloader
 from photomosaic.downloaders.openverse import OpenverseDownloader
+from photomosaic.downloaders.picsum import PicsumDownloader
 
 st.set_page_config(
     page_title="Photomosaic Generator Studio",
@@ -102,8 +103,8 @@ with tab_gen:
 with tab_download:
     st.subheader("Download Stock / Public Domain Images by Keyword")
     theme_query = st.text_input("Search Keyword / Theme", value="nature")
-    provider = st.selectbox("Source Provider", options=["Wikimedia Commons", "Archive.org", "Openverse"])
-    download_limit = st.slider("Number of images", min_value=10, max_value=100, value=30, step=10)
+    provider = st.selectbox("Source Provider", options=["Lorem Picsum (Fast No-Key)", "Wikimedia Commons", "Archive.org", "Openverse"])
+    download_limit = st.slider("Number of images", min_value=10, max_value=200, value=50, step=10)
     target_folder = st.text_input("Save to Folder", value="image_pool")
 
     if st.button("Download Theme Images"):
@@ -114,7 +115,9 @@ with tab_download:
             dl_progress.progress(int(pct) / 100.0)
             dl_status.text(f"Downloading... {int(pct)}%")
 
-        if provider == "Wikimedia Commons":
+        if provider == "Lorem Picsum (Fast No-Key)":
+            downloader = PicsumDownloader()
+        elif provider == "Wikimedia Commons":
             downloader = WikimediaDownloader()
         elif provider == "Archive.org":
             downloader = ArchiveOrgDownloader()

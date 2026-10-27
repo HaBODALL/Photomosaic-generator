@@ -10,10 +10,41 @@ Generateur de photomosaiques haute performance et convivial en Python pour image
 
 <p align="center">
   <img src="demo/input.jpg" width="45%" alt="Image Cible">
-  <img src="demo/example_mosaic.jpg" width="45%" alt="Resultat Photomosaique">
+  <img src="demo/output.jpg" width="45%" alt="Resultat Photomosaique">
   <br>
-  <i>A gauche : Image cible d'origine | A droite : Photomosaique generee (CIELAB 2x2 sous-quadrants, tuiles de 20px)</i>
+  <i>A gauche : Image cible d'origine | A droite : Photomosaique generee (CIELAB 2x2 sous-quadrants, tuiles de 15px, Anti-Repetition 3)</i>
 </p>
+
+---
+
+## Demarrage Rapide : Preparer Votre Reservoir d'Images
+
+Pour generer une photomosaique, vous avez besoin d'une collection d'images composantes (les tuiles). Deux options rapides s'offrent a vous :
+
+### Option 1 : Le telechargement direct (ZIP / Datasets)
+- Telechargez un jeu de donnees standard comme **Animal Image Dataset** ou **Intel Image Classification** sur Kaggle.
+- Placez les images dans `image_pool/`. Elles seront automatiquement indexees et normalisees par l'application.
+
+### Option 2 : Telechargement automatique via API / Script
+Recuperez 50 a 500 photos uniques en quelques secondes sans cle d'API via la CLI ou un script Python :
+
+```bash
+# Telecharger 50 images directement via la CLI (Lorem Picsum)
+photomosaic download --source picsum --limit 50 --output image_pool
+```
+
+Ou via script Python :
+```python
+import requests, os, time
+
+os.makedirs("image_pool", exist_ok=True)
+for i in range(1, 51):
+    r = requests.get(f"https://picsum.photos/200/200?random={i}")
+    if r.status_code == 200:
+        with open(f"image_pool/img_{i}.jpg", "wb") as f:
+            f.write(r.content)
+    time.sleep(0.05)
+```
 
 ---
 
@@ -41,6 +72,7 @@ Generateur de photomosaiques haute performance et convivial en Python pour image
   - **Superposition Reglables (Overlay) :** Melange doux entre l'image cible originale et les tuiles de la mosaique.
 
 - **Telechargeur d'Images par Theme (`photomosaic.downloaders`) :**
+  - **Lorem Picsum** (Generation rapide d'images sans cle API)
   - **Wikimedia Commons** (Domaine public et licences libres)
   - **Archive.org** (Archives d'images du domaine public)
   - **Openverse** (Recherche de medias Creative Commons)
@@ -63,10 +95,8 @@ Generateur de photomosaiques haute performance et convivial en Python pour image
 Vous pouvez explorer la presentation interactive du projet directement sur GitHub Pages :
 **[https://habodall.github.io/Photomosaic-generator/](https://habodall.github.io/Photomosaic-generator/)**
 
-*Pour activer GitHub Pages sur votre depot :*
-1. Allez dans les **Settings** (Parametres) du depot > **Pages**.
-2. Dans **Build and deployment**, choisissez **Branch** : `main` (ou branche par defaut) et le dossier `/docs`.
-3. Enregistrez pour publier le site de presentation !
+*Pour configurer GitHub Pages :*
+Rendez-vous sur **[https://github.com/HaBODALL/Photomosaic-generator/settings/pages/source](https://github.com/HaBODALL/Photomosaic-generator/settings/pages/source)** et choisissez **Branch** : `main` (ou branche par defaut) et le dossier `/docs`.
 
 ---
 
@@ -107,8 +137,8 @@ photomosaic image -i data/input.jpg -o data/output.jpg -p image_pool -s 30 --col
 # Generer une video mosaique
 photomosaic video -i data/input.mp4 -o data/output.mp4 -p image_pool -s 20
 
-# Telecharger des images par theme depuis Wikimedia Commons
-photomosaic download -t "nature" -o image_pool --source wikimedia --limit 50
+# Telecharger des images par theme depuis Wikimedia Commons ou Picsum
+photomosaic download -t "nature" -o image_pool --source picsum --limit 50
 ```
 
 ### 3. Utilisation des Anciens Scripts
