@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Photomosaic Generator Studio | Online Interactive Showcase</title>
+    <title>Photomosaic Studio Web Sandbox</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
@@ -11,15 +11,10 @@
             color: #f8fafc;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        .hero {
+        .app-header {
             background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            padding: 4rem 0;
+            padding: 2.5rem 0;
             border-bottom: 1px solid #334155;
-        }
-        .badge-tech {
-            background-color: #38bdf8;
-            color: #0f172a;
-            font-weight: 600;
         }
         .card-custom {
             background-color: #1e293b;
@@ -28,133 +23,254 @@
             padding: 1.5rem;
             height: 100%;
         }
+        .canvas-container {
+            position: relative;
+            max-width: 100%;
+            background-color: #020617;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #334155;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 300px;
+        }
+        canvas {
+            max-width: 100%;
+            height: auto;
+        }
         .warning-box {
             background-color: rgba(239, 68, 68, 0.1);
             border-left: 4px solid #ef4444;
             padding: 1rem 1.5rem;
             border-radius: 6px;
-            margin-bottom: 2rem;
-        }
-        .limits-box {
-            background-color: rgba(56, 189, 248, 0.1);
-            border-left: 4px solid #38bdf8;
-            padding: 1rem 1.5rem;
-            border-radius: 6px;
-            margin-bottom: 2rem;
-        }
-        footer {
-            border-top: 1px solid #334155;
-            padding: 2rem 0;
-            color: #94a3b8;
+            margin-bottom: 1.5rem;
         }
     </style>
 </head>
 <body>
 
-    <!-- Hero Header -->
-    <header class="hero text-center">
+    <header class="app-header text-center">
         <div class="container">
-            <h1 class="display-4 fw-bold text-white mb-3">Photomosaic Generator Studio</h1>
-            <p class="lead text-slate-300 mb-4">Online test and showcase page for high-performance Python photomosaic art generation using themed image banks (Wikimedia, Openverse, Archive.org).</p>
-            <div class="d-flex justify-content-center gap-2 mb-3">
-                <span class="badge badge-tech rounded-pill px-3 py-2">CIELAB L*a*b*</span>
-                <span class="badge badge-tech rounded-pill px-3 py-2">cKDTree Search</span>
-                <span class="badge badge-tech rounded-pill px-3 py-2">Streamlit Web GUI</span>
-                <span class="badge badge-tech rounded-pill px-3 py-2">Themed Datasets</span>
-            </div>
-            <div class="mt-4">
-                <a href="https://github.com/HaBODALL/Photomosaic-generator" class="btn btn-primary btn-lg px-4 me-2">GitHub Repository</a>
-                <a href="#demo" class="btn btn-outline-light btn-lg px-4">Explore Results</a>
+            <h1 class="display-5 fw-bold text-white mb-2">Photomosaic Web Studio Sandbox</h1>
+            <p class="text-slate-300">Interactive browser-based testing tool. Upload your target image, generate tile pools, and render photomosaics directly in your browser.</p>
+            <div>
+                <a href="https://github.com/HaBODALL/Photomosaic-generator" class="btn btn-outline-light btn-sm">GitHub Repository</a>
             </div>
         </div>
     </header>
 
-    <main class="container my-5">
+    <main class="container my-4">
 
-        <!-- Security & Web Testing Limits Section -->
         <div class="warning-box">
-            <h5 class="text-danger fw-bold mb-2">WARNING: Vibe Coding and Security</h5>
-            <p class="mb-0">This repository is an experimental <strong>"vibe coding" project</strong> (AI-assisted rapid iteration). Users should never expose API keys or OAuth credentials in public code. Always use <code>.env</code> files and secure HTTPS endpoints.</p>
+            <h6 class="text-danger fw-bold mb-1">Browser Sandbox Testing Limits</h6>
+            <p class="mb-0 small">This client-side web studio runs entirely inside your browser for testing. For full multi-processing server-side video rendering and high-resolution printing, use the Python CLI or Streamlit app.</p>
         </div>
 
-        <div class="limits-box">
-            <h5 class="text-info fw-bold mb-2">Web Live Test Limits</h5>
-            <p class="mb-0">To optimize client browser resources and online rendering performance, online web testing parameters are capped at: Max target resolution 1080p, Max tile pool count 200 images, Tile stride minimum 10px, and Video max frame rate 30 FPS.</p>
+        <div class="row g-4">
+            <!-- Controls Sidebar -->
+            <div class="col-lg-4">
+                <div class="card-custom">
+                    <h5 class="fw-bold text-info mb-3">1. Upload Target Image</h5>
+                    <div class="mb-3">
+                        <input class="form-control bg-dark text-white border-secondary" type="file" id="targetInput" accept="image/*">
+                    </div>
+
+                    <h5 class="fw-bold text-info mb-3 mt-4">2. Tile Pool Options</h5>
+                    <div class="mb-3">
+                        <label class="form-label small">Load Sample Tile Collection</label>
+                        <button id="loadPresetBtn" class="btn btn-secondary btn-sm w-100">Load Demo Nature Pool (50 Tiles)</button>
+                        <div id="tileStatus" class="form-text text-slate-400 mt-1">No custom tile pool loaded yet.</div>
+                    </div>
+
+                    <h5 class="fw-bold text-info mb-3 mt-4">3. Settings</h5>
+                    <div class="mb-3">
+                        <label for="strideRange" class="form-label small d-flex justify-content-between">
+                            Tile Size (px): <span id="strideVal" class="fw-bold text-warning">20</span>
+                        </label>
+                        <input type="range" class="form-range" id="strideRange" min="10" max="50" step="5" value="20">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="overlayRange" class="form-label small d-flex justify-content-between">
+                            Overlay Ratio: <span id="overlayVal" class="fw-bold text-warning">0.0</span>
+                        </label>
+                        <input type="range" class="form-range" id="overlayRange" min="0.0" max="0.5" step="0.05" value="0.0">
+                    </div>
+
+                    <button id="generateBtn" class="btn btn-success btn-lg w-100 mt-3" disabled>Generate Photomosaic</button>
+                    <a id="downloadBtn" class="btn btn-outline-info w-100 mt-2 d-none" download="photomosaic_result.png">Download Output Image</a>
+                </div>
+            </div>
+
+            <!-- Preview Canvas Area -->
+            <div class="col-lg-8">
+                <div class="card-custom">
+                    <h5 class="fw-bold text-white mb-3">Canvas Live Test Viewport</h5>
+                    <div class="canvas-container p-2">
+                        <canvas id="outputCanvas"></canvas>
+                        <div id="placeholderText" class="text-muted">Upload a target image and load a tile pool to render.</div>
+                    </div>
+                    <div id="statusAlert" class="alert alert-dark mt-3 d-none mb-0" role="alert"></div>
+                </div>
+            </div>
         </div>
-
-        <!-- Interactive Comparison Section with Themed Image Bank -->
-        <section id="demo" class="my-5 text-center">
-            <h2 class="fw-bold mb-2">Photomosaic Result Showcase</h2>
-            <p class="text-muted mb-4">Sample created using a open <strong>Nature / Landscape image bank</strong> downloaded from Wikimedia Commons.</p>
-
-            <div class="row g-4 justify-content-center">
-                <div class="col-md-6">
-                    <div class="card-custom">
-                        <h5 class="fw-bold text-info mb-3">Original Target Image</h5>
-                        <img src="../demo/input.jpg" class="img-fluid rounded border border-secondary" alt="Input Target Image">
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="card-custom">
-                        <h5 class="fw-bold text-success mb-3">Photomosaic (Nature Image Bank)</h5>
-                        <img src="../demo/output.jpg" class="img-fluid rounded border border-secondary" alt="Photomosaic Result with Nature Image Bank">
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Feature Grid -->
-        <section class="my-5">
-            <h2 class="fw-bold text-center mb-5">Key Architectural Innovations</h2>
-            <div class="row g-4">
-                <div class="col-md-4">
-                    <div class="card-custom">
-                        <h4 class="h5 fw-bold text-primary">CIELAB & 2x2 Sub-Grid</h4>
-                        <p class="text-slate-400">Uses perceptual L*a*b* color space matching and sub-quadrant feature vectors to preserve gradients and local tile textures.</p>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card-custom">
-                        <h4 class="h5 fw-bold text-primary">Theme Image Banks</h4>
-                        <p class="text-slate-400">Download stock and open-license photo collections on demand from Lorem Picsum, Wikimedia Commons, Archive.org, Openverse, Unsplash, Pexels, and Pixabay.</p>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card-custom">
-                        <h4 class="h5 fw-bold text-primary">Cloud Media Connectors</h4>
-                        <p class="text-slate-400">Modular connectors for self-hosted Immich instances, Google Photos API, and WebDAV / Nextcloud personal libraries.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Quick Start Section -->
-        <section class="my-5">
-            <div class="card-custom">
-                <h3 class="fw-bold mb-3">Quick Start Guide</h3>
-                <pre class="bg-dark text-success p-3 rounded"><code># 1. Clone repository
-git clone https://github.com/HaBODALL/Photomosaic-generator.git
-cd Photomosaic-generator
-
-# 2. Install package
-pip install -e .
-
-# 3. Launch Web Studio GUI
-streamlit run app.py
-
-# 4. Generate photomosaic using a downloaded nature image bank
-photomosaic download --source wikimedia --theme "nature" --limit 50 --output nature_pool
-photomosaic image -i data/input.jpg -o data/output.jpg -p nature_pool -s 15 --color_space lab</code></pre>
-            </div>
-        </section>
 
     </main>
 
-    <footer class="text-center">
-        <div class="container">
-            <p class="mb-0">Photomosaic Generator Studio &copy; 2026. Distributed under MIT License.</p>
-        </div>
-    </footer>
+    <script>
+        const targetInput = document.getElementById('targetInput');
+        const loadPresetBtn = document.getElementById('loadPresetBtn');
+        const tileStatus = document.getElementById('tileStatus');
+        const strideRange = document.getElementById('strideRange');
+        const strideVal = document.getElementById('strideVal');
+        const overlayRange = document.getElementById('overlayRange');
+        const overlayVal = document.getElementById('overlayVal');
+        const generateBtn = document.getElementById('generateBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const canvas = document.getElementById('outputCanvas');
+        const ctx = canvas.getContext('2d');
+        const placeholderText = document.getElementById('placeholderText');
+        const statusAlert = document.getElementById('statusAlert');
 
+        let targetImage = null;
+        let tileImages = [];
+        let tileAvgColors = [];
+
+        strideRange.addEventListener('input', (e) => strideVal.textContent = e.target.value);
+        overlayRange.addEventListener('input', (e) => overlayVal.textContent = e.target.value);
+
+        targetInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const img = new Image();
+                img.onload = () => {
+                    targetImage = img;
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    ctx.drawImage(img, 0, 0);
+                    placeholderText.classList.add('d-none');
+                    checkReady();
+                };
+                img.src = URL.createObjectURL(file);
+            }
+        });
+
+        loadPresetBtn.addEventListener('click', async () => {
+            tileStatus.textContent = 'Loading demo tile pool...';
+            tileImages = [];
+            tileAvgColors = [];
+
+            // Load 20 color swatch tiles dynamically for client-side demo
+            const colors = [
+                '#f87171', '#fb923c', '#fbbf24', '#a3e635', '#4ade80', '#34d399',
+                '#22d3ee', '#38bdf8', '#60a5fa', '#818cf8', '#a78bfa', '#c084fc',
+                '#e879f9', '#f472b6', '#fb7185', '#1e293b', '#475569', '#94a3b8',
+                '#f1f5f9', '#020617'
+            ];
+
+            for (let i = 0; i < colors.length; i++) {
+                const tileCanvas = document.createElement('canvas');
+                tileCanvas.width = 40;
+                tileCanvas.height = 40;
+                const tCtx = tileCanvas.getContext('2d');
+                tCtx.fillStyle = colors[i];
+                tCtx.fillRect(0, 0, 40, 40);
+
+                const img = new Image();
+                await new Promise((resolve) => {
+                    img.onload = resolve;
+                    img.src = tileCanvas.toDataURL();
+                });
+
+                tileImages.push(img);
+                // Parse RGB
+                const hex = colors[i].replace('#', '');
+                const r = parseInt(hex.substring(0, 2), 16);
+                const g = parseInt(hex.substring(2, 4), 16);
+                const b = parseInt(hex.substring(4, 6), 16);
+                tileAvgColors.push([r, g, b]);
+            }
+
+            tileStatus.textContent = 'Loaded demo swatch pool (20 tiles).';
+            checkReady();
+        });
+
+        function checkReady() {
+            if (targetImage && tileImages.length > 0) {
+                generateBtn.disabled = false;
+            }
+        }
+
+        generateBtn.addEventListener('click', () => {
+            if (!targetImage || tileImages.length === 0) return;
+
+            statusAlert.classList.remove('d-none');
+            statusAlert.textContent = 'Processing photomosaic on canvas...';
+
+            setTimeout(() => {
+                const stride = parseInt(strideRange.value);
+                const overlay = parseFloat(overlayRange.value);
+
+                const w = targetImage.width;
+                const h = targetImage.height;
+
+                canvas.width = w;
+                canvas.height = h;
+
+                // Draw target to read pixel data
+                ctx.drawImage(targetImage, 0, 0);
+                const imgData = ctx.getImageData(0, 0, w, h);
+                const data = imgData.data;
+
+                const cols = Math.floor(w / stride);
+                const rows = Math.floor(h / stride);
+
+                for (let r = 0; r < rows; r++) {
+                    for (let c = 0; c < cols; c++) {
+                        let sumR = 0, sumG = 0, sumB = 0, count = 0;
+
+                        for (let y = r * stride; y < (r + 1) * stride; y++) {
+                            for (let x = c * stride; x < (c + 1) * stride; x++) {
+                                const idx = (y * w + x) * 4;
+                                sumR += data[idx];
+                                sumG += data[idx + 1];
+                                sumB += data[idx + 2];
+                                count++;
+                            }
+                        }
+
+                        const avgR = sumR / count;
+                        const avgG = sumG / count;
+                        const avgB = sumB / count;
+
+                        // Find closest tile
+                        let bestIdx = 0;
+                        let minDist = Infinity;
+                        for (let i = 0; i < tileAvgColors.length; i++) {
+                            const [tr, tg, tb] = tileAvgColors[i];
+                            const dist = Math.pow(avgR - tr, 2) + Math.pow(avgG - tg, 2) + Math.pow(avgB - tb, 2);
+                            if (dist < minDist) {
+                                minDist = dist;
+                                bestIdx = i;
+                            }
+                        }
+
+                        ctx.drawImage(tileImages[bestIdx], c * stride, r * stride, stride, stride);
+                    }
+                }
+
+                if (overlay > 0) {
+                    ctx.globalAlpha = overlay;
+                    ctx.drawImage(targetImage, 0, 0);
+                    ctx.globalAlpha = 1.0;
+                }
+
+                downloadBtn.href = canvas.toDataURL('image/png');
+                downloadBtn.classList.remove('d-none');
+                statusAlert.textContent = 'Photomosaic rendered successfully!';
+            }, 50);
+        });
+    </script>
 </body>
 </html>
