@@ -2,17 +2,18 @@
 
 > **[English version available here](README.md)** | **[Explorer la Demo GitHub Pages](https://habodall.github.io/Photomosaic-generator/)**
 
-Generateur de photomosaiques haute performance et convivial en Python pour images et videos, propulse par la correspondance de couleurs CIELAB, l'indexation spatiale cKDTree, des algorithmes d'anti-repetition, un telechargeur d'images par theme et des connecteurs cloud personnels.
+Generateur de photomosaiques haute performance et convivial en Python pour images et videos, propulse par la correspondance de couleurs CIELAB, l'indexation spatiale cKDTree, la recherche par sous-quadrants 2x2, des algorithmes d'anti-repetition, un telechargeur d'images par theme et des connecteurs cloud personnels.
 
 ---
 
-## Exemple de Resultat
+## Demonstration Visuelle et Ameliorations Algorithmiques
 
 <p align="center">
-  <img src="demo/input.jpg" width="45%" alt="Image Cible">
-  <img src="demo/output.jpg" width="45%" alt="Resultat Photomosaique">
+  <img src="demo/input.jpg" width="30%" alt="Image Cible">
+  <img src="archive/legacy_mosaic.jpg" width="30%" alt="Ancien Matching RGB">
+  <img src="demo/output.jpg" width="30%" alt="Nouveau Moteur CIELAB 2x2">
   <br>
-  <i>A gauche : Image cible d'origine | A droite : Photomosaique generee (CIELAB 2x2 sous-quadrants, tuiles de 15px, Anti-Repetition 3)</i>
+  <i>A gauche : Image cible d'origine | Au milieu : Ancien matching de couleurs RGB simple | A droite : Nouveau moteur CIELAB 2x2 avec Anti-Repetition (Banque Nature Wikimedia)</i>
 </p>
 
 ---
@@ -156,7 +157,7 @@ python video2video.py --input data/input.mp4 --output data/output.mp4 --pool ima
 
 Pour executer la suite de tests unitaires :
 ```bash
-pytest
+python3 -m pytest
 ```
 
 ---
